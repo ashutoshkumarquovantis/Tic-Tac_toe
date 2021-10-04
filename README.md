@@ -26,5 +26,5 @@ b.	If no one can create a straight line with their own mark and all the position
 <p><img src="https://i.imgur.com/mkxXVuD.png"></p>
 
 
-# Live Demo
+### Live Demo
 [---------> Click here for Demo <---------](https://ashutoshkumarquovantis.github.io/Tic-Tac_toe/)
