@@ -6,6 +6,7 @@
 Each box is uniquely identified as box-1, box-2 ....
 */
 
+
 // One time declared variables-------------------------------
 const boxes = document.querySelectorAll(".small-box");
 const resetBtn = document.querySelector(".button-reset");
@@ -19,53 +20,54 @@ const arr = new Array(9).fill(0);
 let togglePlayer = true;
 
 
-//Event listner on Global to find the click event.
-window.addEventListener("click", findClass);
+// Functions used in the code
+let findWinner, resetGrid, toggler, findClass;
 
 
-//function to find the position of the click on the board to add either X or O -------------------
-function findClass(e){
-    const className = e.target.className.split(" ");
-    const myBox = document.querySelector("."+className[1]);
-    myBox.addEventListener("click", toggler(className[1]))
-    findWinner();
-}
+// Logic to Find the Winner of the game.
+findWinner = () =>{
 
+    // if X wins
+    const x_win = (arr[0] === 1 && arr[1] === 1 && arr[2] === 1) || (arr[3] === 1 && arr[4] === 1 && arr[5] === 1)
+                || (arr[6] === 1 && arr[7] === 1 && arr[8] === 1) || (arr[0] === 1 && arr[3] === 1 && arr[6] === 1) 
+                || (arr[1] === 1 && arr[4] === 1 && arr[7] === 1) || (arr[2] === 1 && arr[5] === 1 && arr[8] === 1)
+                || (arr[0] === 1 && arr[4] === 1 && arr[8] === 1) || (arr[2] === 1 && arr[4] === 1 && arr[6] === 1);
 
-//Function to add X or O one after another -------------------------------------
-function toggler(e){
-    const ch = String(e).charAt(e.length-1);
-    const num = Number(ch);
-    const element = document.querySelector("."+e);
+    // if O wins
+    const y_win = (arr[0] === 2 && arr[1] === 2 && arr[2] === 2) || (arr[3] === 2 && arr[4] === 2 && arr[5] === 2) 
+                || (arr[6] === 2 && arr[7] === 2 && arr[8] === 2) || (arr[0] === 2 && arr[3] === 2 && arr[6] === 2)
+                || (arr[1] === 2 && arr[4] === 2 && arr[7] === 2) || (arr[2] === 2 && arr[5] === 2 && arr[8] === 2)
+                || (arr[0] === 2 && arr[4] === 2 && arr[8] === 2) || (arr[2] === 2 && arr[4] === 2 && arr[6] === 2);
 
-// for X -> Player 1 ---------------------------------------
-    if(arr[num-1] == 0){
-        if(togglePlayer == true){
-            togglePlayer = false;
-            arr[num-1] = 1;
-            element.innerHTML = `</i><i class="fas fa-times">`;
-            for(let b = 0; b < 9; b++){
-                boxes[b].style.borderColor = "green";
-            }
-        }
+    // X - > 
+    if(x_win === true){
+        winnerTxt.setAttribute("value", "Winner X");
+        bigBox.style.backgroundColor = "red";
+        modal.style.backgroundColor = "red";
+        bigBox.style.visibility = "hidden";
+        
+    }
 
-// for O -> player 2 ----------------------------------------
-        else{
-            arr[num-1] = 2;
-            togglePlayer = true;
-            element.innerHTML = `<i class="far fa-circle"></i>`;
-            for(let b = 0; b < 9; b++){
-                boxes[b].style.borderColor = "red";
-            }
+    // O - > 
+    else if(y_win === true){
+        winnerTxt.setAttribute("value", "Winner O");
+        bigBox.style.backgroundColor = "green";
+        modal.style.backgroundColor = "green";
+        bigBox.style.visibility = "hidden";
+        
+    }
+
+    // Draw condition.
+    else{
+        if(arr.includes(0) === false){
+            winnerTxt.setAttribute("value", "Draw!");
         }
     }
+    
 }
 
-// Reset Button event listner ----------------------------------
-resetBtn.addEventListener("click", resetGrid);
-
 // To reset the board so that new game can start -------------------------------
-function resetGrid(){
+resetGrid = () => {
 
     //Clear every box on the board
     for(let i = 0; i < boxes.length; i++){
@@ -82,45 +84,46 @@ function resetGrid(){
     bigBox.style.visibility = "visible";
 }
 
+//Function to add X or O one after another -------------------------------------
+toggler = (e) => {
+    const ch = String(e).charAt(e.length-1);
+    const num = Number(ch);
+    const element = document.querySelector("."+e);
 
-// Logic to Find the Winner of the game.
-function findWinner(){
+// for X -> Player 1 ---------------------------------------
+    if(arr[num-1] == 0){
+        if(togglePlayer == true){
+            togglePlayer = false;
+            arr[num-1] = 1;
+            element.innerHTML = `</i><i class="fas fa-times">`;
+            boxes.forEach((box) => {
+                box.style.borderColor = 'green';
+            });
+        }
 
-    // if X wins
-    const x_win = (arr[0] == 1 && arr[1] == 1 && arr[2] == 1) || (arr[3] == 1 && arr[4] == 1 && arr[5] == 1)
-                || (arr[6] == 1 && arr[7] == 1 && arr[8] == 1) || (arr[0] == 1 && arr[3] == 1 && arr[6] == 1) 
-                || (arr[1] == 1 && arr[4] == 1 && arr[7] == 1) || (arr[2] == 1 && arr[5] == 1 && arr[8] == 1)
-                || (arr[0] == 1 && arr[4] == 1 && arr[8] == 1) || (arr[2] == 1 && arr[4] == 1 && arr[6] == 1);
-
-    // if O wins
-    const y_win = (arr[0] == 2 && arr[1] == 2 && arr[2] == 2) || (arr[3] == 2 && arr[4] == 2 && arr[5] == 2) 
-                || (arr[6] == 2 && arr[7] == 2 && arr[8] == 2) || (arr[0] == 2 && arr[3] == 2 && arr[6] == 2)
-                || (arr[1] == 2 && arr[4] == 2 && arr[7] == 2) || (arr[2] == 2 && arr[5] == 2 && arr[8] == 2)
-                || (arr[0] == 2 && arr[4] == 2 && arr[8] == 2) || (arr[2] == 2 && arr[4] == 2 && arr[6] == 2);
-
-    // X - > 
-    if(x_win == true){
-        winnerTxt.setAttribute("value", "Winner X");
-        bigBox.style.backgroundColor = "red";
-        modal.style.backgroundColor = "red";
-        bigBox.style.visibility = "hidden";
-        
-    }
-
-    // O - > 
-    else if(y_win == true){
-        winnerTxt.setAttribute("value", "Winner O");
-        bigBox.style.backgroundColor = "green";
-        modal.style.backgroundColor = "green";
-        bigBox.style.visibility = "hidden";
-        
-    }
-
-    // Draw condition.
-    else{
-        if(arr.includes(0) == false){
-            winnerTxt.setAttribute("value", "Draw!");
+// for O -> player 2 ----------------------------------------
+        else{
+            arr[num-1] = 2;
+            togglePlayer = true;
+            element.innerHTML = `<i class="far fa-circle"></i>`;
+            boxes.forEach((box) => {
+                box.style.borderColor = 'red';
+            })
         }
     }
+}
+
+//function to find the position of the click on the board to add either X or O -------------------
+findClass = (e) => {
+    const className = e.target.className.split(" ");
+    const myBox = document.querySelector("."+className[1]);
+    myBox.addEventListener("click", toggler(className[1]))
+    findWinner();
     
 }
+
+//Event listner on Big-Box to find the click event.
+bigBox.addEventListener("click", findClass);
+
+// Reset Button event listner ----------------------------------
+resetBtn.addEventListener("click", resetGrid);
